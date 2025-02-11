@@ -30,8 +30,21 @@ message Response {
 
 **Install:**
 
-```sh
-go install github.com/panjiang/protoc-gen-go-oneof-api-adapter@latest
+```console
+$ go install github.com/panjiang/protoc-gen-go-oneof-api-adapter@latest
+```
+
+```console
+$ protoc-gen-go-oneof-api-adapter -version
+
+protoc-gen-go-oneof-api-adapter 0.1
+protoc options `--go-oneof-api-adapter_opt=api=$value1,request=$value2,response=$value3`
+  -api string
+        The API name will used as Prefix of classes (default "Api")
+  -request string
+        The oneof path of request messages attachment at (default "Request/body")
+  -response string
+        The oneof path of response messages attachment at (default "Response/body")
 ```
 
 **Compile:**
@@ -39,17 +52,6 @@ go install github.com/panjiang/protoc-gen-go-oneof-api-adapter@latest
 ```sh
 protoc -I ./example/api \
   --go_out ./example/api --go_opt=paths=source_relative \
-  --go-oneof-api-adapter_out ./example/api --go-oneof-api-adapter_opt=paths=source_relative,request=Request/body,response=Response/body \
+  --go-oneof-api-adapter_out ./example/api --go-oneof-api-adapter_opt=paths=source_relative,api=Api,request=Request/body,response=Response/body \
   example/api/product/app/v1/v1.proto
 ```
-
-**Options:**
-
-- `request` - The oneof path of request messages attachment at.
-  - Format: `$RequestMessageName/$RequestBodyOneofFieldName`
-  - Default: `Request/body`
-- `response` - The oneof path of response messages attachment at.
-  - Format: `$ResponseMessageName/$ResponseBodyOneofFieldName`
-  - Default: `Response/body`
-- `apiName` - The API name will used as Prefix of classes.
-  - Default: `ProtoApi`

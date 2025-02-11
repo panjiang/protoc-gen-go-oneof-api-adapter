@@ -10,20 +10,31 @@ import (
 	"google.golang.org/protobuf/types/pluginpb"
 )
 
-const version = "0.0.1"
+const version = "0.1"
+
+type FlagVar struct {
+	RequestOneofPath  string
+	ResponseOneofPath string
+	ApiName           string
+}
 
 func main() {
+	var flagVar FlagVar
+	var flags flag.FlagSet
+	flags.StringVar(&flagVar.RequestOneofPath, "request", "Request/body", "The oneof path of request messages attachment at")
+	flags.StringVar(&flagVar.ResponseOneofPath, "response", "Response/body", "The oneof path of response messages attachment at")
+	flags.StringVar(&flagVar.ApiName, "api", "Api", "The API name will used as Prefix of classes")
+
 	showVersion := flag.Bool("version", false, "print the version and exit")
 	flag.Parse()
+
 	if *showVersion {
 		fmt.Printf("protoc-gen-go-oneof-api-adapter %v\n", version)
+		fmt.Println("protoc options `--go-oneof-api-adapter_opt=api=$value1,request=$value2,response=$value3`")
+		flags.PrintDefaults()
 		return
 	}
 
-	var flags flag.FlagSet
-	requestOneofPath := flags.String("request", "Request/body", "The oneof path of request messages attachment at")
-	responseOneofPath := flags.String("response", "Response/body", "The oneof path of response messages attachment at")
-	apiName := flags.String("api", "ProtoApi", "The API name will used as Prefix of classes")
 	options := protogen.Options{
 		ParamFunc: flags.Set,
 	}
@@ -37,13 +48,13 @@ func main() {
 				continue
 			}
 
-			if generateAdapterFile(gen, f, *requestOneofPath, *responseOneofPath, *apiName) {
+			if generateAdapterFile(gen, f, flagVar) {
 				found = true
 				break
 			}
 		}
 		if !found {
-			panic(fmt.Errorf("not found the path, request:%s, response:%s", *requestOneofPath, *responseOneofPath))
+			panic(fmt.Errorf("not found the path, request: %s, response: %s", flagVar.RequestOneofPath, flagVar.ResponseOneofPath))
 		}
 		return nil
 	})
@@ -79,9 +90,9 @@ const (
 )
 
 // generateAdapterFile generates a _adapter.pb.go file.
-func generateAdapterFile(gen *protogen.Plugin, file *protogen.File, requestOneofPath, responseOneofPath string, apiName string) bool {
-	requestPath := parseOneofPath(requestOneofPath)
-	responsePath := parseOneofPath(responseOneofPath)
+func generateAdapterFile(gen *protogen.Plugin, file *protogen.File, flagVar FlagVar) bool {
+	requestPath := parseOneofPath(flagVar.RequestOneofPath)
+	responsePath := parseOneofPath(flagVar.ResponseOneofPath)
 
 	var reqOneOf, respOneOf *protogen.Oneof
 	for _, msg := range file.Messages {
@@ -105,11 +116,11 @@ func generateAdapterFile(gen *protogen.Plugin, file *protogen.File, requestOneof
 		return false
 	}
 	if respOneOf == nil {
-		panic(fmt.Errorf("not found response path: %s, should be in the same file as the request", responseOneofPath))
+		panic(fmt.Errorf("not found response path: %s, should be in the same file as the request", flagVar.ResponseOneofPath))
 	}
 
 	tmpl := &AdapterTemplate{
-		ApiName:                apiName,
+		ApiName:                flagVar.ApiName,
 		PackageName:            "",
 		UnionRequestType:       requestPath.MessageName,
 		UnionResponseType:      responsePath.MessageName,
