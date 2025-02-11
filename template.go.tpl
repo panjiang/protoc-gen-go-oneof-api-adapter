@@ -1,6 +1,6 @@
 
 var (
-	ErrUnknownRequest = errors.New("unknown request")
+	Err{{ $.ApiName }}UnknownRequest = errors.New("unknown request")
 )
 
 type {{ $.HandlerInterfaceName }} interface {
@@ -37,7 +37,7 @@ func (a *{{ $.AdapterImplementationName }}) Dispatch(ctx context.Context, reques
 		}
     {{- end }}
     default:
-		return nil, ErrUnknownRequest
+		return nil, Err{{ $.ApiName }}UnknownRequest
     }
 	return response, nil
 }

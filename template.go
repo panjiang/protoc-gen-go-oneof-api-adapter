@@ -11,7 +11,7 @@ import (
 var tpl string
 
 type AdapterTemplate struct {
-	ServerName             string // UserServer
+	ApiName                string // Api
 	PackageName            string // userpb
 	UnionRequestType       string // Request
 	UnionResponseType      string // Response
@@ -21,15 +21,15 @@ type AdapterTemplate struct {
 }
 
 func (a *AdapterTemplate) AdapterInterfaceName() string {
-	return toUpperFirst(a.ServerName) + "Adapter"
+	return toUpperFirst(a.ApiName) + "Adapter"
 }
 
 func (a *AdapterTemplate) AdapterImplementationName() string {
-	return toLowerFirst(a.ServerName) + "Adapter"
+	return toLowerFirst(a.ApiName) + "Adapter"
 }
 
 func (a *AdapterTemplate) HandlerInterfaceName() string {
-	return a.ServerName + "Handler"
+	return a.ApiName + "Handler"
 }
 
 func (a *AdapterTemplate) WithPackageName(name string) string {

@@ -12,29 +12,29 @@ import (
 // errors.
 
 var (
-	ErrUnknownRequest = errors.New("unknown request")
+	ErrApiUnknownRequest = errors.New("unknown request")
 )
 
-type ProtoApiHandler interface {
+type ApiHandler interface {
 	LoginWithOpenID(context.Context, *LoginWithOpenIDRequest) (*LoginWithOpenIDResponse, error)
 	LoginWithAccount(context.Context, *LoginWithAccountRequest) (*LoginWithAccountResponse, error)
 }
 
-type ProtoApiAdapter interface {
+type ApiAdapter interface {
 	Dispatch(context.Context, *Request) (*Response, error)
 }
 
-func NewProtoApiAdapter(handler ProtoApiHandler) ProtoApiAdapter {
-	return &protoApiAdapter{
+func NewApiAdapter(handler ApiHandler) ApiAdapter {
+	return &apiAdapter{
 		handler: handler,
 	}
 }
 
-type protoApiAdapter struct {
-	handler ProtoApiHandler
+type apiAdapter struct {
+	handler ApiHandler
 }
 
-func (a *protoApiAdapter) Dispatch(ctx context.Context, request *Request) (*Response, error) {
+func (a *apiAdapter) Dispatch(ctx context.Context, request *Request) (*Response, error) {
 	response := new(Response)
 	switch req := request.Body.(type) {
 	case *Request_LoginWithOpenid:
@@ -54,7 +54,7 @@ func (a *protoApiAdapter) Dispatch(ctx context.Context, request *Request) (*Resp
 			LoginWithAccount: resp,
 		}
 	default:
-		return nil, ErrUnknownRequest
+		return nil, ErrApiUnknownRequest
 	}
 	return response, nil
 }

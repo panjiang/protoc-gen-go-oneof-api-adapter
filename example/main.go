@@ -27,7 +27,7 @@ func (a *ApiHandler) LoginWithOpenID(context.Context, *v1.LoginWithOpenIDRequest
 }
 
 type GinHandler struct {
-	apiAdapter v1.ProtoApiAdapter
+	apiAdapter v1.ApiAdapter
 }
 
 func (h *GinHandler) parseRequest(c *gin.Context) (*v1.Request, error) {
@@ -73,7 +73,7 @@ func (h *GinHandler) Handle(c *gin.Context) {
 
 func main() {
 	apiHandler := &ApiHandler{}
-	apiAdapter := v1.NewProtoApiAdapter(apiHandler)
+	apiAdapter := v1.NewApiAdapter(apiHandler)
 	ginHandler := GinHandler{apiAdapter: apiAdapter}
 
 	r := gin.New()

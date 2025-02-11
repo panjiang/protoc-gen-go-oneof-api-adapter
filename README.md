@@ -46,4 +46,10 @@ protoc -I ./example/api \
 **Options:**
 
 - `request` - The oneof path of request messages attachment at.
+  - Format: `$RequestMessageName/$RequestBodyOneofFieldName`
+  - Default: `Request/body`
 - `response` - The oneof path of response messages attachment at.
+  - Format: `$ResponseMessageName/$ResponseBodyOneofFieldName`
+  - Default: `Response/body`
+- `apiName` - The API name will used as Prefix of classes.
+  - Default: `ProtoApi`

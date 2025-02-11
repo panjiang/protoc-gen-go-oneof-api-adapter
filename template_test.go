@@ -8,7 +8,7 @@ import (
 
 func TestAdapterTemplate(t *testing.T) {
 	tmpl := &AdapterTemplate{
-		ServerName:             "UserServer",
+		ApiName:                "Api",
 		PackageName:            "userpb",
 		UnionRequestType:       "Request",
 		UnionResponseType:      "Response",
