@@ -138,13 +138,14 @@ func generateAdapterFile(gen *protogen.Plugin, file *protogen.File, flagVar Flag
 		respName := string(respBodyFieldDesc.Message().Name())
 
 		hf := HandlerFunc{}
-		hf.Method = strings.TrimSuffix(reqName, "Request")
 		hf.RequestType = reqName
 		hf.ResponseType = respName
 		hf.RequestOneofField = reqOneOf.Fields[i].GoName
 		hf.ResponseOneofField = respOneOf.Fields[i].GoName
-		hf.RequestOneofType = requestPath.MessageName + "_" + reqOneOf.Fields[i].GoName
-		hf.ResponseOneofType = responsePath.MessageName + "_" + respOneOf.Fields[i].GoName
+
+		hf.RequestOneofType = requestPath.MessageName + "_" + hf.RequestOneofField
+		hf.ResponseOneofType = responsePath.MessageName + "_" + hf.ResponseOneofField
+		hf.Method = strings.TrimSuffix(hf.RequestOneofField, "Request")
 
 		tmpl.HandlerFuncList = append(tmpl.HandlerFuncList, hf)
 	}

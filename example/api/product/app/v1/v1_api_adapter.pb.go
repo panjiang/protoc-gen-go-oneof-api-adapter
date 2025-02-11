@@ -16,7 +16,7 @@ var (
 )
 
 type ApiHandler interface {
-	LoginWithOpenID(context.Context, *LoginWithOpenIDRequest) (*LoginWithOpenIDResponse, error)
+	LoginWithOpenid(context.Context, *LoginWithOpenIDRequest) (*LoginWithOpenIDResponse, error)
 	LoginWithAccount(context.Context, *LoginWithAccountRequest) (*LoginWithAccountResponse, error)
 }
 
@@ -38,7 +38,7 @@ func (a *apiAdapter) Dispatch(ctx context.Context, request *Request) (*Response,
 	response := new(Response)
 	switch req := request.Body.(type) {
 	case *Request_LoginWithOpenid:
-		resp, err := a.handler.LoginWithOpenID(ctx, req.LoginWithOpenid)
+		resp, err := a.handler.LoginWithOpenid(ctx, req.LoginWithOpenid)
 		if err != nil {
 			return nil, err
 		}

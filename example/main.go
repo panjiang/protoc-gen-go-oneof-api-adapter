@@ -22,7 +22,7 @@ func (a *ApiHandler) LoginWithAccount(context.Context, *v1.LoginWithAccountReque
 }
 
 // LoginWithOpenID implements v1.ApiHandler.
-func (a *ApiHandler) LoginWithOpenID(context.Context, *v1.LoginWithOpenIDRequest) (*v1.LoginWithOpenIDResponse, error) {
+func (a *ApiHandler) LoginWithOpenid(context.Context, *v1.LoginWithOpenIDRequest) (*v1.LoginWithOpenIDResponse, error) {
 	panic("unimplemented")
 }
 
