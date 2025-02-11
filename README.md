@@ -4,6 +4,8 @@ When building an HTTP server based on protobuf message interactions, we needed a
 
 See [example](./example/main.go) for complete code.
 
+---
+
 **Proto:**
 
 ```proto3
@@ -30,9 +32,11 @@ message Response {
 
 **Install:**
 
-```console
-$ go install github.com/panjiang/protoc-gen-go-oneof-api-adapter@latest
+```sh
+go install github.com/panjiang/protoc-gen-go-oneof-api-adapter@latest
 ```
+
+**Inspect:**
 
 ```console
 $ protoc-gen-go-oneof-api-adapter -version
