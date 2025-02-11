@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = "github.com/panjiang/protoc-gen-oneof-api-adapter/example/api/product/app/v1";
+
+package product.app.v1;
+
+message RequestHead {
+  uint32 seq = 1;
+}
+
+message ResponseHead {
+  uint32 seq = 1;
+  int32 code = 2;
+}
+
+message Request {
+  RequestHead head = 1;
+
+  oneof body {
+    LoginWithOpenIDRequest login_with_openid = 2;
+    LoginWithAccountRequest login_with_account = 3;
+  }
+}
+
+message Response {
+  ResponseHead head = 1;
+
+  oneof body {
+    LoginWithOpenIDResponse login_with_openid = 2;
+    LoginWithAccountResponse login_with_account = 3;
+  }
+}
+
+message LoginWithOpenIDRequest {}
+
+message LoginWithOpenIDResponse {}
+
+message LoginWithAccountRequest {}
+
+message LoginWithAccountResponse {}
